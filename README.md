@@ -12,16 +12,10 @@ Supabase
 PostgreSQL
 NVIDIA NIM
 
-- 🔗 **Live demo:** *coming soon* 
-- 🎥 **Video walkthrough:** *coming soon*
+- 🔗 **Live demo:** [https://doc-chat-demo.netlify.app/](https://doc-chat-demo.netlify.app/) — deployed on free-tier infrastructure, so performance may not be optimal.
+- 🎥 **Video walkthrough:** [https://www.loom.com/share/6ec8223f8b2f409ea9d0f32855b45ad6](https://www.loom.com/share/6ec8223f8b2f409ea9d0f32855b45ad6) — runs on a free NVIDIA NIM (Nemotron) account, so expect some delay in responses.
 
 ## Screenshots
-
-<p align="center">
-  <img src="docs/images/image_login.png" alt="Sign in" width="48%" />
-  <img src="docs/images/image_dashboard.png" alt="Chat with cited answers" width="48%" />
-</p>
-
 
 ## Quick start
 
@@ -129,10 +123,9 @@ orchestration, rather than hand-rolling it.
 
 ## Deployment
 
-**Today:** both the frontend and backend run on Netlify's free tier, and the
-whole stack is containerised (`docker-compose.yml`, one image for the whole
-app). Supabase provides Postgres + pgvector, Auth, and Storage as managed
-services.
+**Today:** the frontend runs on Netlify's free tier and the backend runs as a
+container on Render's free tier (built from the multi-stage `backend/Dockerfile`).
+Supabase provides Postgres + pgvector, Auth, and Storage as managed services.
 
 **Productionizing on a hyperscaler.** Because the app is already containerised,
 the path to AWS / GCP / Azure / Cloudflare is mostly about *where* the container
@@ -187,11 +180,9 @@ are what make that repeatable — short invariants, an allow-list of safe
 commands, `/check` and `/eval` slash commands, and focused review subagents.
 
 **Fine-grained control over what the agent can run.**
-[`.claude/settings.json`](./.claude/settings.json) gates every Bash command
-through explicit allow/deny lists — read-only commands (`ls`, `grep`, `git
-diff`, …) run without prompting, while destructive ones (`rm -rf`, `git push
---force`) and reads of any `.env*` file are hard-denied. A `PreToolUse` hook,
-[`.claude/hooks/guard-env.sh`](./.claude/hooks/guard-env.sh), backstops that by
+`[.claude/settings.json](./.claude/settings.json)` gates every Bash command
+through explicit allow/deny lists — read-only commands (`ls`, `grep`, `git diff`, …) run without prompting, while destructive ones (`rm -rf`, `git push --force`) and reads of any `.env`* file are hard-denied. A `PreToolUse` hook,
+`[.claude/hooks/guard-env.sh](./.claude/hooks/guard-env.sh)`, backstops that by
 blocking any Bash command that touches a `.env` file, so secrets never round-trip
 through the model's context.
 
