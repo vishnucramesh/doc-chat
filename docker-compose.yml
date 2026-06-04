@@ -1,0 +1,31 @@
+# Local dev stack. Talks to a real Supabase project (cloud) — we don't run a
+# local Supabase here because the user already has cloud Supabase set up and
+# adding a 4-container local Supabase stack is more friction than this build
+# justifies. If you want fully local, see https://supabase.com/docs/guides/cli/local-development.
+#
+# Env: each service reads its own folder's .env — backend/.env (runtime) and
+# frontend/.env (baked in at build by Vite). There is no root .env.
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:8080"
+
+  frontend:
+    # Build-time VITE_* vars come from frontend/.env (read by Vite during the
+    # image build) — no root .env or build args needed. For the docker stack,
+    # set VITE_API_BASE_URL=http://localhost:8000 in frontend/.env.
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend

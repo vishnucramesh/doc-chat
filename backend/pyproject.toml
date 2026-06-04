@@ -1,0 +1,43 @@
+[project]
+name = "doc-chat-backend"
+version = "0.1.0"
+description = "Chat-with-your-docs FastAPI backend"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi[standard]>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "python-multipart>=0.0.12",
+  "httpx>=0.27",
+  "openai>=1.54",
+  "supabase>=2.9",
+  "pypdf>=5.1",
+  "tiktoken>=0.8",
+  "PyJWT[crypto]>=2.9",
+  "structlog>=24.4",
+  "tenacity>=9.0",
+  # Migration tooling. SQLAlchemy is an Alembic dep but we list it
+  # explicitly so version pins are visible. psycopg2-binary is a sync driver
+  # used only by Alembic at deploy time — the runtime app talks to Postgres
+  # via the Supabase PostgREST client, not SQLAlchemy.
+  "alembic>=1.13",
+  "SQLAlchemy>=2.0",
+  "psycopg2-binary>=2.9",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "ruff>=0.7",
+  "respx>=0.21",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

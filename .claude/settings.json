@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git stash list:*)",
+      "Bash(git ls-files:*)",
+
+      "Bash(.venv/bin/pytest:*)",
+      "Bash(.venv/bin/python -m pytest:*)",
+      "Bash(.venv/bin/python -m eval.run_eval:*)",
+      "Bash(.venv/bin/ruff:*)",
+      "Bash(.venv/bin/alembic history:*)",
+      "Bash(.venv/bin/alembic current:*)",
+      "Bash(.venv/bin/alembic heads:*)",
+      "Bash(.venv/bin/alembic check:*)",
+      "Bash(.venv/bin/alembic upgrade head --sql:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv lock --check:*)",
+      "Bash(make help:*)",
+      "Bash(make migrate-status:*)",
+      "Bash(make migrate-sql:*)",
+      "Bash(pytest:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(ruff check:*)",
+      "Bash(ruff format --check:*)",
+
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run test:*)",
+      "Bash(npx tsc --noEmit:*)",
+      "Bash(npx prettier --check:*)",
+      "Bash(npx eslint:*)",
+
+      "Bash(docker compose config:*)",
+      "Bash(docker images:*)",
+      "Bash(docker ps:*)",
+
+      "Bash(.claude/hooks/*:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./frontend/.env)",
+      "Read(./frontend/.env.local)",
+      "Read(./backend/.env)",
+      "Write(./.env)",
+      "Write(./.env.local)",
+      "Edit(./.env)",
+      "Edit(./.env.local)",
+
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(fly deploy:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(supabase db reset:*)",
+      "Bash(supabase db push:*)",
+      "Bash(.venv/bin/alembic upgrade:*)",
+      "Bash(.venv/bin/alembic downgrade:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(alembic downgrade:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/guard-env.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/format-on-save.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

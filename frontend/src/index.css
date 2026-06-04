@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-bg text-ink antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    @apply bg-accent/30 text-ink;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium
+           transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-black hover:bg-accent2;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink2 hover:bg-panel2 hover:text-ink;
+  }
+  .input {
+    @apply w-full rounded-md border border-border bg-panel px-3 py-2 text-sm placeholder:text-ink2
+           focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent;
+  }
+  .card {
+    @apply rounded-lg border border-border bg-panel;
+  }
+  .citation-chip {
+    @apply inline-flex h-4 min-w-[1rem] cursor-pointer items-center justify-center rounded
+           bg-accent/15 px-1 text-[10px] font-medium text-accent hover:bg-accent/25;
+  }
+
+  /* ChatGPT-style composer pill. The textarea + toolbar live INSIDE this
+     container, giving the "single rounded input" feel rather than the
+     two-column textarea+button layout that reads like a 2018 web form. */
+  .composer-pill {
+    @apply rounded-3xl border border-border bg-panel2/40 px-4 py-3
+           transition-colors focus-within:border-ink2/30;
+  }
+  .composer-textarea {
+    @apply w-full resize-none bg-transparent text-[15px] leading-6 text-ink
+           placeholder:text-ink2 focus:outline-none;
+  }
+  /* Send button — small circular icon button. White-on-dark when active,
+     so it pops on the dark canvas. Disabled state fades into the pill. */
+  .send-btn {
+    @apply flex h-8 w-8 items-center justify-center rounded-full transition-colors
+           bg-ink text-bg hover:bg-ink/90
+           disabled:cursor-not-allowed disabled:bg-panel2 disabled:text-ink2;
+  }
+}
+
+/* The streaming-cursor blink for the in-flight assistant message */
+.cursor-blink::after {
+  content: "▍";
+  animation: blink 1s steps(2) infinite;
+  margin-left: 1px;
+  opacity: 0.7;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}

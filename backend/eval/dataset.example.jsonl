@@ -1,0 +1,3 @@
+{"id": "q1", "question": "What is the maximum upload size?", "expected_substr": "20", "expected_doc_filename": "README.md"}
+{"id": "q2", "question": "Which embedding model is used and what is its dimension?", "expected_substr": "1024", "expected_doc_filename": "README.md"}
+{"id": "q3", "question": "How does the retriever combine vector and keyword search?", "expected_substr": "Reciprocal Rank Fusion", "expected_doc_filename": "README.md"}

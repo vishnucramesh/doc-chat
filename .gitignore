@@ -1,0 +1,44 @@
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# node
+node_modules/
+.pnpm-store/
+.next/
+.vite/
+
+# editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# logs / scratch
+*.log
+tmp/
+scratch/
+
+# fly / vercel
+.fly/
+.vercel/
+
+# Claude Code — per-developer overrides only. Team-shared settings.json IS committed.
+.claude/settings.local.json
+

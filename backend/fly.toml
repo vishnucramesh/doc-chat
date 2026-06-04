@@ -1,0 +1,51 @@
+# fly.toml — backend container deployment config.
+#
+# Included as evidence of deployment-readiness, NOT because the app is live.
+# To actually deploy:
+#   1. `fly launch --no-deploy` (or `fly apps create <app-name>`)
+#   2. `fly secrets set SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=… NVIDIA_API_KEY=… DATABASE_URL=…`
+#   3. `fly deploy`
+# All env reads go through pydantic-settings, so anything in `.env.example`
+# can be set as a Fly secret with the same name.
+
+app = "doc-chat-api"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+# Run pending Alembic migrations on every deploy, before any machine starts
+# serving traffic. Fly runs this in a short-lived release machine; if it
+# fails, the deploy is rolled back automatically.
+[deploy]
+  release_command = "alembic upgrade head"
+
+[env]
+  APP_ENV = "production"
+  BACKEND_PORT = "8000"
+  # Replace with the actual frontend URL at deploy time — the placeholder
+  # below is illustrative, not a deployed domain.
+  CORS_ORIGINS = "https://<your-frontend-host>,http://localhost:5173"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"   # idle machines stop to save credits
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 25
+    hard_limit = 50
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout  = "5s"
+    method   = "get"
+    path     = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

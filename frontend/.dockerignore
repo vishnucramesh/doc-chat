@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vite/
+# NOTE: .env is intentionally NOT ignored — Vite reads frontend/.env at build
+# time to bake the public VITE_* vars into the bundle. It only enters the
+# (discarded) builder stage; the final image ships just the static dist/.
+.env.local
+.env.*.local
